@@ -1,6 +1,6 @@
-# Stock Trading Bot
+# Stock Trading System
 
-A stock trading bot designed to make data-driven trading decisions by integrating with **TinkoffInvestAPI** and utilizing machine learning models to predict stock price movements. The bot also supports **paper trading**, allowing users to simulate trades without real money.
+A stock trading system designed to make data-driven trading decisions by integrating with **TinkoffInvestAPI** and utilizing machine learning models to predict stock price movements. The system also supports **paper trading**, allowing users to simulate trades without real money.
 
 ---
 
