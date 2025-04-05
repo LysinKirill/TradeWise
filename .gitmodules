@@ -1,9 +1,9 @@
 [submodule "TradeWise-csharp"]
 	path = TradeWise-csharp
-	url = https://github.com/LysinKirill/TradeWise-csharp.git
+	url = git@github.com:LysinKirill/TradeWise-csharp.git
 [submodule "TradeWise-python"]
 	path = TradeWise-python
-	url = https://github.com/LysinKirill/TradeWise-python.git
+	url = git@github.com:LysinKirill/TradeWise-python.git
 [submodule "TradeWise-front"]
 	path = TradeWise-front
-	url = https://github.com/LysinKirill/TradeWise-front.git
+	url = git@github.com:LysinKirill/TradeWise-front.git
