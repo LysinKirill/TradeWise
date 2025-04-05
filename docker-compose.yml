@@ -15,8 +15,6 @@ services:
       - DB_NAME=python-db
       - INVEST_TOKEN=${INVEST_TOKEN}
       - JWT_SECRET=${JWT_SECRET}
-      - GRPC_VERBOSITY=DEBUG
-      - GRPC_TRACE=tcp,http,secure_endpoint
     depends_on:
       python-db:
         condition: service_healthy
