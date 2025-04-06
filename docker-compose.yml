@@ -84,20 +84,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Frontend
-  frontend:
-    build:
-      context: ./TradeWise-front
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      - VITE_API_URL=http://csharp-backend:5000
-      - VITE_GRPC_URL=python-backend:50051
-    depends_on:
-      - python-backend
-      - csharp-backend
-
 volumes:
   python_postgres_data:
   csharp_postgres_data:
