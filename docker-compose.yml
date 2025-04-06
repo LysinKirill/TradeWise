@@ -62,6 +62,7 @@ services:
     environment:
       - ConnectionStrings__DefaultConnection=Host=csharp-db;Database=tradewise;Username=postgres;Password=123456
       - Grpc__CertThumbprint=${GRPC_CERT_THUMBPRINT}
+      - JWT_KEY=${JWT_SECRET}
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       csharp-db:
