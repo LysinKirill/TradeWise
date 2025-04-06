@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  python-backend:
+    build:
+      context: ./TradeWise-python
+      dockerfile: Dockerfile
+    ports:
+      - "50051:50051"
+    environment:
+      - DB_HOST=python-db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=python-db
+      - INVEST_TOKEN=${INVEST_TOKEN}
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      python-db:
+        condition: service_healthy
+    volumes:
+      - ./TradeWise-python:/app
+
+  python-db:
+    image: postgres:13
+    container_name: trade-wise-python-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: python-db
+    ports:
+      - "5433:5432"
+    volumes:
+      - python_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  python-migrator:
+    build:
+      context: ./TradeWise-python
+      dockerfile: Dockerfile
+    command: sh -c "python -m migrations.migrate && python -m postProcessing.Processor"
+    environment:
+      - DB_HOST=python-db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=python-db
+    depends_on:
+      python-db:
+        condition: service_healthy
+
+  csharp-backend:
+    build:
+      context: ./TradeWise-csharp
+      dockerfile: TradeWiseBackend.Api/Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=csharp-db;Database=tradewise;Username=postgres;Password=123456
+      - Grpc__CertThumbprint=${GRPC_CERT_THUMBPRINT}
+      - JWT_KEY=${JWT_SECRET}
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      csharp-db:
+        condition: service_healthy
+
+  csharp-db:
+    image: postgres:13
+    container_name: trade-wise-csharp-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: tradewise
+    ports:
+      - "5432:5432"
+    volumes:
+      - csharp_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  python_postgres_data:
+  csharp_postgres_data:
