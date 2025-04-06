@@ -58,14 +58,14 @@ services:
       context: ./TradeWise-csharp
       dockerfile: TradeWiseBackend.Api/Dockerfile
     ports:
-      - "5000:80"
+      - "5000:8080"
     environment:
       - ConnectionStrings__DefaultConnection=Host=csharp-db;Database=tradewise;Username=postgres;Password=123456
+      - Grpc__CertThumbprint=${GRPC_CERT_THUMBPRINT}
+      - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       csharp-db:
         condition: service_healthy
-    # Added command to run migrations and then the app
-    command: sh -c "dotnet ef database update && dotnet TradeWiseBackend.Api.dll"
 
   csharp-db:
     image: postgres:13
@@ -75,7 +75,7 @@ services:
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: tradewise
     ports:
-      - "5434:5432"
+      - "5432:5432"
     volumes:
       - csharp_postgres_data:/var/lib/postgresql/data
     healthcheck:
