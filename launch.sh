@@ -35,6 +35,6 @@ fi
 
 # 5) Run docker-compose
 echo "Starting services with docker-compose..."
-docker-compose down -v && docker-compose up --build --force-recreate -d
+docker-compose down && docker-compose up --build --force-recreate -d
 
 echo "All tasks completed successfully!"
