@@ -1,5 +1,20 @@
 #!/bin/bash
 
+RECREATE=false
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --recreate)
+            RECREATE=true
+            shift
+            ;;
+        *)
+            echo "Unknown argument: $1"
+            exit 1
+            ;;
+    esac
+done
+
 # 1) Update TradeWise-python submodule to master branch
 echo "Updating TradeWise-python to master branch..."
 git submodule update --init --remote --checkout TradeWise-python
@@ -33,8 +48,14 @@ if ! docker info >/dev/null 2>&1; then
     sleep 10
 fi
 
-# 5) Run docker-compose
+# 5) Run docker-compose with conditional flags
 echo "Starting services with docker-compose..."
-docker-compose down && docker-compose up --build --force-recreate -d
+if [ "$RECREATE" = true ]; then
+    echo "Forcing recreation of all containers..."
+    docker-compose down && docker-compose up --build --force-recreate -d
+else
+    echo "Standard startup (no rebuild or forced recreation)..."
+    docker-compose down && docker-compose up -d
+fi
 
 echo "All tasks completed successfully!"
