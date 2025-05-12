@@ -59,10 +59,12 @@ services:
       dockerfile: TradeWiseBackend.Api/Dockerfile
     ports:
       - "5000:8080"
+      - "5001:5001"
     environment:
       - ConnectionStrings__DefaultConnection=Host=csharp-db;Database=tradewise;Username=postgres;Password=123456
       - Grpc__CertThumbprint=${GRPC_CERT_THUMBPRINT}
       - JWT_KEY=${JWT_SECRET}
+      - ASPNETCORE_URLS=http://[::]:5001 
     depends_on:
       csharp-db:
         condition: service_healthy
